@@ -47,6 +47,7 @@
     <!-- ═══ Stat Cards ═══ -->
     <?php
         $avgScore   = round(array_sum(array_column($products, 'composite_score')) / count($products), 1);
+        $avgPrice   = round(array_sum(array_column($products, 'avg_price')) / count($products), 2);
         $upCount    = count(array_filter($products, fn($p) => $p['trend_direction'] === 'up'));
         $downCount  = count($products) - $upCount;
         $avgYoy     = round(array_sum(array_column($products, 'yoy_change_pct')) / count($products), 1);
@@ -59,6 +60,11 @@
             <div class="change <?= $avgYoy >= 0 ? 'up' : 'down' ?>">
                 <?= $avgYoy >= 0 ? '&#9650;' : '&#9660;' ?> <?= abs($avgYoy) ?>% vs last year
             </div>
+        </div>
+        <div class="stat-card animate-in">
+            <div class="label">Avg Price</div>
+            <div class="value">$<?= number_format($avgPrice, 2) ?></div>
+            <div class="change" style="color:var(--muted)">$69.99 – $500.00 range</div>
         </div>
         <div class="stat-card animate-in">
             <div class="label">Trending Up</div>
