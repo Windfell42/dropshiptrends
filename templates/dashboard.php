@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DropShip Trends — Top 20 Products</title>
+    <title>DropShip Trends — Top 50 Products</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
@@ -16,7 +16,7 @@
     <header class="header">
         <div>
             <h1>DropShip Trends</h1>
-            <div class="subtitle">Top 20 products — 30-day summary — Google Trends + Amazon Movers &amp; Shakers</div>
+            <div class="subtitle">Top 50 products — 30-day summary — Google Trends + Amazon Movers &amp; Shakers</div>
         </div>
         <nav class="date-nav">
             <a href="?date=<?= htmlspecialchars($prevDate) . $catQuery ?>">&larr; Prev</a>
@@ -73,7 +73,7 @@
         <div class="stat-card animate-in">
             <div class="label">Categories Tracked</div>
             <div class="value"><?= count($categoryBreakdown) ?></div>
-            <div class="change" style="color:var(--muted)">across 20 products</div>
+            <div class="change" style="color:var(--muted)">across <?= count($products) ?> products</div>
         </div>
     </div>
 

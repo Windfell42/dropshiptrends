@@ -54,6 +54,20 @@ class TrendDataProvider
         ['name' => 'Beaded Bracelet Collection',   'cat' => 'Jewelry',      'base' => 58, 'peak' => 5],
         ['name' => 'Dash Cam Recorder',            'cat' => 'Auto',         'base' => 76, 'peak' => 8],
         ['name' => 'Car Seat Organizer',           'cat' => 'Auto',         'base' => 63, 'peak' => 6],
+        ['name' => 'Jade Roller Set',              'cat' => 'Beauty',       'base' => 62, 'peak' => 3],
+        ['name' => 'USB Desk Fan',                 'cat' => 'Office',       'base' => 57, 'peak' => 7],
+        ['name' => 'Foam Roller',                  'cat' => 'Fitness',      'base' => 73, 'peak' => 1],
+        ['name' => 'Essential Oil Diffuser',       'cat' => 'Home',         'base' => 77, 'peak' => 11],
+        ['name' => 'Pet Water Fountain',           'cat' => 'Pets',         'base' => 66, 'peak' => 6],
+        ['name' => 'Tire Pressure Gauge',          'cat' => 'Auto',         'base' => 54, 'peak' => 5],
+        ['name' => 'Clip-On Reading Light',        'cat' => 'Office',       'base' => 52, 'peak' => 9],
+        ['name' => 'Layered Pendant Necklace',     'cat' => 'Jewelry',      'base' => 69, 'peak' => 12],
+        ['name' => 'Vitamin Organizer Case',       'cat' => 'Health',       'base' => 60, 'peak' => 1],
+        ['name' => 'Car Trunk Organizer',          'cat' => 'Auto',         'base' => 58, 'peak' => 4],
+        ['name' => 'Hair Claw Clips Set',          'cat' => 'Fashion',      'base' => 75, 'peak' => 8],
+        ['name' => 'Mini Portable Speaker',        'cat' => 'Electronics',  'base' => 71, 'peak' => 6],
+        ['name' => 'Silicone Baking Mat Set',      'cat' => 'Kitchen',      'base' => 64, 'peak' => 11],
+        ['name' => 'Ankle Brace Support',          'cat' => 'Health',       'base' => 56, 'peak' => 3],
     ];
 
     /** Broad filter categories mapped to product-level categories */
@@ -141,9 +155,9 @@ class TrendDataProvider
             ];
         }
 
-        // Sort by composite score descending, take top 20
+        // Sort by composite score descending, take top 50
         usort($products, fn($a, $b) => $b['composite_score'] <=> $a['composite_score']);
-        $products = array_slice($products, 0, 20);
+        $products = array_slice($products, 0, 50);
 
         // Add rank
         foreach ($products as $i => &$p) {
