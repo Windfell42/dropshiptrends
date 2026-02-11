@@ -103,8 +103,8 @@ class TrendDataProvider
             if ($allowedCats !== null && !in_array($p['cat'], $allowedCats, true)) {
                 continue;
             }
-            // Price filter: only include products > $69.99 and < $400.00
-            if ($p['price'] <= 69.99 || $p['price'] >= 400.00) {
+            // Price filter: only include products > $69.99 and < $500.00
+            if ($p['price'] <= 69.99 || $p['price'] >= 500.00) {
                 continue;
             }
 
