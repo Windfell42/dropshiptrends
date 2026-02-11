@@ -288,6 +288,17 @@ a:hover { text-decoration: underline; }
     color: var(--text);
 }
 
+.product-name a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color .15s;
+}
+
+.product-name a:hover {
+    color: var(--accent-l);
+    text-decoration: underline;
+}
+
 .product-cat {
     font-size: .7rem;
     color: var(--muted);
@@ -381,6 +392,16 @@ a:hover { text-decoration: underline; }
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.yoy-card .yoy-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.yoy-card .yoy-name a:hover {
+    color: var(--accent-l);
+    text-decoration: underline;
 }
 
 .yoy-card .yoy-detail {

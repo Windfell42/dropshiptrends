@@ -122,7 +122,7 @@
                         </span>
                     </td>
                     <td>
-                        <div class="product-name"><?= htmlspecialchars($p['name']) ?></div>
+                        <div class="product-name"><a href="https://www.amazon.com/s?k=<?= urlencode($p['name']) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($p['name']) ?></a></div>
                         <div class="product-cat"><?= htmlspecialchars($p['category']) ?></div>
                     </td>
                     <td style="font-weight:600">$<?= number_format($p['avg_price'], 2) ?></td>
@@ -172,7 +172,7 @@
                     <?= $p['yoy_change_pct'] >= 0 ? '&#9650;' : '&#9660;' ?>
                 </div>
                 <div class="yoy-info">
-                    <div class="yoy-name"><?= htmlspecialchars($p['name']) ?></div>
+                    <div class="yoy-name"><a href="https://www.amazon.com/s?k=<?= urlencode($p['name']) ?>" target="_blank" rel="noopener"><?= htmlspecialchars($p['name']) ?></a></div>
                     <div class="yoy-detail">
                         <?= htmlspecialchars($p['category']) ?> &middot;
                         <?= $dt->format('Y') - 1 ?>: <?= $p['yoy_previous'] ?> &rarr;
