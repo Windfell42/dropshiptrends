@@ -20,7 +20,7 @@
         </div>
         <nav class="date-nav">
             <a href="?date=<?= htmlspecialchars($prevDate) ?>">&larr; Prev</a>
-            <span class="current-date"><?= $dt->format('M j, Y') ?></span>
+            <input type="date" class="date-picker" value="<?= htmlspecialchars($selectedDate) ?>" max="<?= $today ?>" onchange="window.location.href='?date='+this.value">
             <?php if ($selectedDate < $today): ?>
                 <a href="?date=<?= htmlspecialchars($nextDate) ?>">Next &rarr;</a>
             <?php else: ?>
