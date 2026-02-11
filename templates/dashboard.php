@@ -104,6 +104,7 @@
                 <tr>
                     <th>#</th>
                     <th>Product</th>
+                    <th>Avg Price</th>
                     <th>Trend</th>
                     <th>Avg Google Score</th>
                     <th>Avg Amazon Rank Δ</th>
@@ -124,6 +125,7 @@
                         <div class="product-name"><?= htmlspecialchars($p['name']) ?></div>
                         <div class="product-cat"><?= htmlspecialchars($p['category']) ?></div>
                     </td>
+                    <td style="font-weight:600">$<?= number_format($p['avg_price'], 2) ?></td>
                     <td>
                         <span class="badge badge-<?= $p['trend_direction'] ?>">
                             <?= $p['trend_direction'] === 'up' ? '&#9650; Rising' : '&#9660; Falling' ?>
