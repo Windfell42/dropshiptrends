@@ -1,0 +1,386 @@
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg:        #0f1117;
+    --surface:   #1a1d27;
+    --card:      #222632;
+    --border:    #2e3345;
+    --text:      #e4e6ed;
+    --muted:     #8b8fa3;
+    --accent:    #6c5ce7;
+    --accent-l:  #a29bfe;
+    --green:     #00b894;
+    --green-bg:  rgba(0,184,148,.12);
+    --red:       #ff6b6b;
+    --red-bg:    rgba(255,107,107,.12);
+    --yellow:    #ffd93d;
+    --blue:      #74b9ff;
+    --radius:    10px;
+    --shadow:    0 2px 12px rgba(0,0,0,.35);
+}
+
+html { font-size: 14px; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+a { color: var(--accent-l); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ─── Layout ─── */
+.container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-l), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header .subtitle {
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+/* Date nav */
+.date-nav {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.date-nav a, .date-nav span {
+    padding: .4rem .75rem;
+    border-radius: var(--radius);
+    font-size: .85rem;
+    font-weight: 500;
+}
+
+.date-nav a {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: background .15s;
+}
+
+.date-nav a:hover { background: var(--border); text-decoration: none; }
+
+.date-nav .current-date {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ─── Stat Cards Row ─── */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem;
+    box-shadow: var(--shadow);
+}
+
+.stat-card .label {
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--muted);
+    margin-bottom: .35rem;
+}
+
+.stat-card .value {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.stat-card .change {
+    font-size: .8rem;
+    font-weight: 600;
+    margin-top: .25rem;
+}
+
+.stat-card .change.up   { color: var(--green); }
+.stat-card .change.down { color: var(--red); }
+
+/* ─── Charts Grid ─── */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .charts-grid { grid-template-columns: 1fr; }
+}
+
+.chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+}
+
+.chart-card h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.chart-card canvas {
+    width: 100% !important;
+}
+
+/* ─── Product Table ─── */
+.table-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.table-card h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 1.1rem 1.25rem .75rem;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+}
+
+.product-table thead th {
+    text-align: left;
+    padding: .6rem 1rem;
+    font-weight: 600;
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.product-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .1s;
+}
+
+.product-table tbody tr:hover { background: rgba(108,92,231,.06); }
+.product-table tbody tr:last-child { border-bottom: none; }
+
+.product-table td {
+    padding: .65rem 1rem;
+    vertical-align: middle;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: .75rem;
+}
+
+.rank-1 { background: linear-gradient(135deg, #f9ca24, #f0932b); color: #1a1d27; }
+.rank-2 { background: linear-gradient(135deg, #b2bec3, #636e72); color: #fff; }
+.rank-3 { background: linear-gradient(135deg, #e17055, #d63031); color: #fff; }
+.rank-other { background: var(--border); color: var(--muted); }
+
+.product-name {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.product-cat {
+    font-size: .7rem;
+    color: var(--muted);
+    margin-top: .1rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: .15rem .5rem;
+    border-radius: 20px;
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+.badge-up   { background: var(--green-bg); color: var(--green); }
+.badge-down { background: var(--red-bg); color: var(--red); }
+
+.score-bar-wrap {
+    width: 80px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: .5rem;
+}
+
+.score-bar {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+}
+
+.sparkline-cell canvas {
+    display: block;
+}
+
+/* YoY column */
+.yoy-change {
+    font-weight: 700;
+    font-size: .85rem;
+}
+.yoy-change.up   { color: var(--green); }
+.yoy-change.down { color: var(--red); }
+
+/* ─── YoY Comparison Cards ─── */
+.yoy-section h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.yoy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: .75rem;
+    margin-bottom: 1.5rem;
+}
+
+.yoy-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.yoy-card .yoy-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.yoy-card .yoy-icon.up   { background: var(--green-bg); color: var(--green); }
+.yoy-card .yoy-icon.down { background: var(--red-bg);   color: var(--red); }
+
+.yoy-card .yoy-info { flex: 1; min-width: 0; }
+
+.yoy-card .yoy-name {
+    font-weight: 600;
+    font-size: .85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yoy-card .yoy-detail {
+    font-size: .75rem;
+    color: var(--muted);
+    margin-top: .15rem;
+}
+
+.yoy-card .yoy-pct {
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.yoy-card .yoy-pct.up   { color: var(--green); }
+.yoy-card .yoy-pct.down { color: var(--red); }
+
+/* ─── Footer ─── */
+.footer {
+    text-align: center;
+    padding: 1.5rem 0;
+    color: var(--muted);
+    font-size: .75rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .header { flex-direction: column; align-items: flex-start; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .product-table { font-size: .78rem; }
+    .product-table td, .product-table th { padding: .5rem .6rem; }
+    .yoy-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Loading animation ─── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    animation: fadeInUp .35s ease-out both;
+}
+
+.product-table tbody tr:nth-child(1)  { animation-delay: .03s; }
+.product-table tbody tr:nth-child(2)  { animation-delay: .06s; }
+.product-table tbody tr:nth-child(3)  { animation-delay: .09s; }
+.product-table tbody tr:nth-child(4)  { animation-delay: .12s; }
+.product-table tbody tr:nth-child(5)  { animation-delay: .15s; }
+.product-table tbody tr:nth-child(6)  { animation-delay: .18s; }
+.product-table tbody tr:nth-child(7)  { animation-delay: .21s; }
+.product-table tbody tr:nth-child(8)  { animation-delay: .24s; }
+.product-table tbody tr:nth-child(9)  { animation-delay: .27s; }
+.product-table tbody tr:nth-child(10) { animation-delay: .30s; }
+.product-table tbody tr:nth-child(11) { animation-delay: .33s; }
+.product-table tbody tr:nth-child(12) { animation-delay: .36s; }
+.product-table tbody tr:nth-child(13) { animation-delay: .39s; }
+.product-table tbody tr:nth-child(14) { animation-delay: .42s; }
+.product-table tbody tr:nth-child(15) { animation-delay: .45s; }
+.product-table tbody tr:nth-child(16) { animation-delay: .48s; }
+.product-table tbody tr:nth-child(17) { animation-delay: .51s; }
+.product-table tbody tr:nth-child(18) { animation-delay: .54s; }
+.product-table tbody tr:nth-child(19) { animation-delay: .57s; }
+.product-table tbody tr:nth-child(20) { animation-delay: .60s; }

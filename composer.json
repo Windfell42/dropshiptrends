@@ -1,0 +1,13 @@
+{
+    "name": "dropshiptrends/dashboard",
+    "description": "Dropship product trends dashboard combining Google Trends and Amazon Movers & Shakers data",
+    "type": "project",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
