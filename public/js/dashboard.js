@@ -173,6 +173,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ─── Sortable Table Columns ───
+    const sortableHeaders = document.querySelectorAll('.sortable-th[data-sort-col]');
+    sortableHeaders.forEach(th => {
+        let sorted = false; // false = original order, true = desc
+        const table = th.closest('table');
+        const tbody = table.querySelector('tbody');
+        const colIndex = Array.from(th.parentElement.children).indexOf(th);
+        const originalRows = Array.from(tbody.querySelectorAll('tr'));
+
+        th.addEventListener('click', () => {
+            // Clear active state from other sortable headers
+            sortableHeaders.forEach(h => {
+                if (h !== th) {
+                    h.classList.remove('sort-desc', 'sort-asc');
+                    h._sorted = false;
+                }
+            });
+
+            if (!sorted) {
+                // Sort descending (highest to lowest)
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                rows.sort((a, b) => {
+                    const aVal = parseFloat(a.children[colIndex].dataset.sortValue) || 0;
+                    const bVal = parseFloat(b.children[colIndex].dataset.sortValue) || 0;
+                    return bVal - aVal;
+                });
+                rows.forEach(r => tbody.appendChild(r));
+                th.classList.add('sort-desc');
+                th.classList.remove('sort-asc');
+                sorted = true;
+            } else {
+                // Restore original order
+                originalRows.forEach(r => tbody.appendChild(r));
+                th.classList.remove('sort-desc', 'sort-asc');
+                sorted = false;
+            }
+            th._sorted = sorted;
+        });
+    });
+
     // ─── Inline Sparklines ───
     document.querySelectorAll('.sparkline-canvas').forEach(canvas => {
         const data = JSON.parse(canvas.dataset.values);

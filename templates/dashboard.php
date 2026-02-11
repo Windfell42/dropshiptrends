@@ -140,10 +140,10 @@
                     <th>Avg Price</th>
                     <th>Trend</th>
                     <th>Avg Google Score</th>
-                    <th>Avg Amazon Rank Δ</th>
+                    <th class="sortable-th" data-sort-col="amazon">Avg Amazon Rank Δ</th>
                     <th>Avg Composite</th>
                     <th>30-Day Sparkline</th>
-                    <th>YoY Change</th>
+                    <th class="sortable-th" data-sort-col="yoy">YoY Change</th>
                 </tr>
             </thead>
             <tbody>
@@ -170,7 +170,7 @@
                         </div>
                         <?= $p['google_trend'] ?>
                     </td>
-                    <td style="color:<?= $p['amazon_rank_change'] >= 0 ? 'var(--green)' : 'var(--red)' ?>; font-weight:600">
+                    <td data-sort-value="<?= $p['amazon_rank_change'] ?>" style="color:<?= $p['amazon_rank_change'] >= 0 ? 'var(--green)' : 'var(--red)' ?>; font-weight:600">
                         <?= $p['amazon_rank_change'] >= 0 ? '+' : '' ?><?= $p['amazon_rank_change'] ?>%
                     </td>
                     <td style="font-weight:700"><?= $p['composite_score'] ?></td>
@@ -179,7 +179,7 @@
                                 data-values='<?= json_encode($p['sparkline_30d']) ?>'
                                 data-direction="<?= $p['trend_direction'] ?>"></canvas>
                     </td>
-                    <td>
+                    <td data-sort-value="<?= $p['yoy_change_pct'] ?>">
                         <span class="yoy-change <?= $p['yoy_change_pct'] >= 0 ? 'up' : 'down' ?>">
                             <?= $p['yoy_change_pct'] >= 0 ? '&#9650;' : '&#9660;' ?>
                             <?= abs($p['yoy_change_pct']) ?>%

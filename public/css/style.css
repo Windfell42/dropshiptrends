@@ -353,6 +353,34 @@ a:hover { text-decoration: underline; }
     white-space: nowrap;
 }
 
+.product-table thead th.sortable-th {
+    cursor: pointer;
+    user-select: none;
+    transition: color .15s;
+}
+
+.product-table thead th.sortable-th:hover {
+    color: var(--accent-l);
+}
+
+.product-table thead th.sortable-th::after {
+    content: ' ⇅';
+    font-size: .65rem;
+    opacity: .4;
+}
+
+.product-table thead th.sortable-th.sort-desc::after {
+    content: ' ▼';
+    opacity: 1;
+    color: var(--accent-l);
+}
+
+.product-table thead th.sortable-th.sort-asc::after {
+    content: ' ▲';
+    opacity: 1;
+    color: var(--accent-l);
+}
+
 .product-table tbody tr {
     border-bottom: 1px solid var(--border);
     transition: background .1s;
