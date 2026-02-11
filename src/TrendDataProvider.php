@@ -49,48 +49,74 @@ class TrendDataProvider
         ['name' => 'Digital Kitchen Scale',        'cat' => 'Kitchen',      'base' => 61, 'peak' => 1],
         ['name' => 'Foldable Travel Bag',          'cat' => 'Travel',       'base' => 79, 'peak' => 6],
         ['name' => 'Teeth Whitening Kit',          'cat' => 'Beauty',       'base' => 84, 'peak' => 5],
+        ['name' => 'Sterling Silver Chain Necklace','cat' => 'Jewelry',     'base' => 72, 'peak' => 12],
+        ['name' => 'Cubic Zirconia Ring Set',      'cat' => 'Jewelry',      'base' => 65, 'peak' => 2],
+        ['name' => 'Beaded Bracelet Collection',   'cat' => 'Jewelry',      'base' => 58, 'peak' => 5],
+        ['name' => 'Dash Cam Recorder',            'cat' => 'Auto',         'base' => 76, 'peak' => 8],
+        ['name' => 'Car Seat Organizer',           'cat' => 'Auto',         'base' => 63, 'peak' => 6],
     ];
 
+    /** Broad filter categories mapped to product-level categories */
+    private const CATEGORY_GROUPS = [
+        'Health Products' => ['Health', 'Fitness', 'Beauty', 'Grooming', 'Personal'],
+        'Automotive'      => ['Auto', 'Travel'],
+        'Household'       => ['Home', 'Home Decor', 'Kitchen', 'Office', 'Pets'],
+        'Electronics'     => ['Electronics', 'Gadgets'],
+        'Jewelry'         => ['Jewelry', 'Accessories', 'Fashion'],
+    ];
+
+    public function getCategoryGroups(): array
+    {
+        return array_keys(self::CATEGORY_GROUPS);
+    }
+
     /**
-     * Get the top 20 products ranked by composite trend score for a given date,
+     * Get the top 20 products ranked by 30-day average composite trend score,
      * including 30-day sparkline history and year-over-year comparison.
-     *
-     * @return array<int, array{
-     *   rank: int,
-     *   name: string,
-     *   category: string,
-     *   google_trend: int,
-     *   amazon_rank_change: float,
-     *   composite_score: float,
-     *   trend_direction: string,
-     *   sparkline_30d: int[],
-     *   yoy_current: int,
-     *   yoy_previous: int,
-     *   yoy_change_pct: float
-     * }>
+     * Optionally filter by a broad category group.
      */
-    public function getTopProducts(string $date): array
+    public function getTopProducts(string $date, ?string $categoryGroup = null): array
     {
         $dt = new \DateTimeImmutable($date);
+        $allowedCats = null;
+        if ($categoryGroup !== null && isset(self::CATEGORY_GROUPS[$categoryGroup])) {
+            $allowedCats = self::CATEGORY_GROUPS[$categoryGroup];
+        }
+
         $products = [];
 
         foreach (self::PRODUCTS as $i => $p) {
-            $googleTrend = $this->googleTrendScore($i, $dt);
-            $amazonRank  = $this->amazonRankChange($i, $dt);
+            if ($allowedCats !== null && !in_array($p['cat'], $allowedCats, true)) {
+                continue;
+            }
+
+            // 30-day sparkline and running sums for averages
+            $sparkline = [];
+            $googleSum = 0;
+            $amazonSum = 0;
+            for ($d = 29; $d >= 0; $d--) {
+                $pastDate = $dt->modify("-{$d} days");
+                $gs = $this->googleTrendScore($i, $pastDate);
+                $sparkline[] = $gs;
+                $googleSum += $gs;
+                $amazonSum += $this->amazonRankChange($i, $pastDate);
+            }
+
+            // 30-day averages
+            $googleTrend = (int) round($googleSum / 30);
+            $amazonRank  = round($amazonSum / 30, 1);
+
             // Normalize Amazon rank change (-5..+5 range) to 0-100 scale, then blend
             $amazonNorm  = max(0, min(100, 50 + $amazonRank * 10));
             $composite   = ($googleTrend * 0.6) + ($amazonNorm * 0.4);
 
-            // 30-day sparkline
-            $sparkline = [];
+            // Year-over-year (also 30-day average)
+            $yoyGoogleSum = 0;
             for ($d = 29; $d >= 0; $d--) {
-                $pastDate = $dt->modify("-{$d} days");
-                $sparkline[] = $this->googleTrendScore($i, $pastDate);
+                $pastDate = $dt->modify("-1 year -{$d} days");
+                $yoyGoogleSum += $this->googleTrendScore($i, $pastDate);
             }
-
-            // Year-over-year
-            $lastYearDate = $dt->modify('-1 year');
-            $yoyPrevious  = $this->googleTrendScore($i, $lastYearDate);
+            $yoyPrevious  = (int) round($yoyGoogleSum / 30);
             $yoyCurrent   = $googleTrend;
             $yoyChange    = $yoyPrevious > 0
                 ? round(($yoyCurrent - $yoyPrevious) / $yoyPrevious * 100, 1)
@@ -105,7 +131,7 @@ class TrendDataProvider
                 'name'              => $p['name'],
                 'category'          => $p['cat'],
                 'google_trend'      => $googleTrend,
-                'amazon_rank_change'=> round($amazonRank, 1),
+                'amazon_rank_change'=> $amazonRank,
                 'composite_score'   => round($composite, 1),
                 'trend_direction'   => $dir,
                 'sparkline_30d'     => $sparkline,
@@ -132,9 +158,9 @@ class TrendDataProvider
      *
      * @return array<string, array{avg_score: float, product_count: int, trend: string}>
      */
-    public function getCategoryBreakdown(string $date): array
+    public function getCategoryBreakdown(string $date, ?string $categoryGroup = null): array
     {
-        $products = $this->getTopProducts($date);
+        $products = $this->getTopProducts($date, $categoryGroup);
         $cats = [];
 
         foreach ($products as $p) {
@@ -164,10 +190,10 @@ class TrendDataProvider
     /**
      * Get 30-day daily composite scores for the top N products (for multi-line chart).
      */
-    public function getDailyTrends(string $date, int $topN = 5): array
+    public function getDailyTrends(string $date, int $topN = 5, ?string $categoryGroup = null): array
     {
         $dt = new \DateTimeImmutable($date);
-        $topProducts = $this->getTopProducts($date);
+        $topProducts = $this->getTopProducts($date, $categoryGroup);
         $topSlice = array_slice($topProducts, 0, $topN);
 
         $labels = [];

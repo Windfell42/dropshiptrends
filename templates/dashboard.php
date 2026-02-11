@@ -16,21 +16,33 @@
     <header class="header">
         <div>
             <h1>DropShip Trends</h1>
-            <div class="subtitle">Top 20 products — Google Trends + Amazon Movers &amp; Shakers</div>
+            <div class="subtitle">Top 20 products — 30-day summary — Google Trends + Amazon Movers &amp; Shakers</div>
         </div>
         <nav class="date-nav">
-            <a href="?date=<?= htmlspecialchars($prevDate) ?>">&larr; Prev</a>
-            <input type="date" class="date-picker" value="<?= htmlspecialchars($selectedDate) ?>" max="<?= $today ?>" onchange="window.location.href='?date='+this.value">
+            <a href="?date=<?= htmlspecialchars($prevDate) . $catQuery ?>">&larr; Prev</a>
+            <input type="date" class="date-picker" value="<?= htmlspecialchars($selectedDate) ?>" max="<?= $today ?>" onchange="window.location.href='?date='+this.value+'<?= htmlspecialchars($catQuery) ?>'">
             <?php if ($selectedDate < $today): ?>
-                <a href="?date=<?= htmlspecialchars($nextDate) ?>">Next &rarr;</a>
+                <a href="?date=<?= htmlspecialchars($nextDate) . $catQuery ?>">Next &rarr;</a>
             <?php else: ?>
                 <span style="color:var(--muted);font-size:.85rem">Today</span>
             <?php endif; ?>
             <?php if ($selectedDate !== $today): ?>
-                <a href="?date=<?= $today ?>" style="background:var(--accent);color:#fff">Today</a>
+                <a href="?date=<?= $today . $catQuery ?>" style="background:var(--accent);color:#fff">Today</a>
             <?php endif; ?>
         </nav>
     </header>
+
+    <!-- ═══ Category Filter ═══ -->
+    <div class="category-filter">
+        <label class="filter-label">Category:</label>
+        <a href="?date=<?= htmlspecialchars($selectedDate) ?>" class="filter-btn<?= $categoryParam === null ? ' active' : '' ?>">All</a>
+        <?php foreach ($categoryGroups as $group): ?>
+            <a href="?date=<?= htmlspecialchars($selectedDate) ?>&category=<?= urlencode($group) ?>"
+               class="filter-btn<?= $categoryParam === $group ? ' active' : '' ?>">
+                <?= htmlspecialchars($group) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
 
     <!-- ═══ Stat Cards ═══ -->
     <?php
@@ -42,7 +54,7 @@
     ?>
     <div class="stats-row">
         <div class="stat-card animate-in">
-            <div class="label">Avg Composite Score</div>
+            <div class="label">30-Day Avg Composite</div>
             <div class="value"><?= $avgScore ?></div>
             <div class="change <?= $avgYoy >= 0 ? 'up' : 'down' ?>">
                 <?= $avgYoy >= 0 ? '&#9650;' : '&#9660;' ?> <?= abs($avgYoy) ?>% vs last year
@@ -79,13 +91,13 @@
 
     <!-- ═══ YoY Comparison Bar Chart ═══ -->
     <div class="chart-card animate-in" style="margin-bottom:1.5rem">
-        <h2>Year-over-Year Comparison — <?= $dt->format('M j') ?>, <?= $dt->format('Y') ?> vs <?= $dt->format('Y') - 1 ?></h2>
+        <h2>Year-over-Year Comparison (30-Day Avg) — <?= $dt->format('M j') ?>, <?= $dt->format('Y') ?> vs <?= $dt->format('Y') - 1 ?></h2>
         <div style="height:340px"><canvas id="yoyChart"></canvas></div>
     </div>
 
     <!-- ═══ Product Table ═══ -->
     <div class="table-card animate-in">
-        <h2>Top 20 Dropship Products — <?= $dt->format('M j, Y') ?></h2>
+        <h2>Top Dropship Products — 30-Day Summary ending <?= $dt->format('M j, Y') ?><?= $categoryParam ? ' — ' . htmlspecialchars($categoryParam) : '' ?></h2>
         <div style="overflow-x:auto">
         <table class="product-table">
             <thead>
@@ -93,9 +105,9 @@
                     <th>#</th>
                     <th>Product</th>
                     <th>Trend</th>
-                    <th>Google Score</th>
-                    <th>Amazon Rank Δ</th>
-                    <th>Composite</th>
+                    <th>Avg Google Score</th>
+                    <th>Avg Amazon Rank Δ</th>
+                    <th>Avg Composite</th>
                     <th>30-Day Sparkline</th>
                     <th>YoY Change</th>
                 </tr>
@@ -150,7 +162,7 @@
 
     <!-- ═══ YoY Snapshot Cards ═══ -->
     <div class="yoy-section animate-in">
-        <h2>Year-over-Year Snapshot — <?= $dt->format('M j') ?></h2>
+        <h2>Year-over-Year Snapshot (30-Day Avg) — <?= $dt->format('M j') ?></h2>
         <div class="yoy-grid">
         <?php foreach ($products as $p): ?>
             <div class="yoy-card">
