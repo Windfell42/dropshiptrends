@@ -44,6 +44,33 @@
         <?php endforeach; ?>
     </div>
 
+    <!-- ═══ Prior 30-Day Top 10 ═══ -->
+    <div class="prior-period-card animate-in">
+        <h2>
+            Prior 30-Day Top 10
+            <span class="prior-period-range">
+                <?= $priorDt->modify('-29 days')->format('M j') ?> – <?= $priorDt->format('M j, Y') ?>
+            </span>
+        </h2>
+        <div class="prior-grid">
+        <?php foreach ($priorProducts as $idx => $pp): ?>
+            <div class="prior-item">
+                <span class="prior-rank"><?= $idx + 1 ?></span>
+                <div class="prior-info">
+                    <div class="prior-name"><?= htmlspecialchars($pp['name']) ?></div>
+                    <div class="prior-cat"><?= htmlspecialchars($pp['category']) ?> · $<?= number_format($pp['avg_price'], 2) ?></div>
+                </div>
+                <div class="prior-score">
+                    <div class="prior-score-value"><?= $pp['composite_score'] ?></div>
+                    <span class="badge badge-<?= $pp['trend_direction'] ?>">
+                        <?= $pp['trend_direction'] === 'up' ? '&#9650;' : '&#9660;' ?>
+                    </span>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        </div>
+    </div>
+
     <!-- ═══ Stat Cards ═══ -->
     <?php
         $avgScore   = round(array_sum(array_column($products, 'composite_score')) / count($products), 1);

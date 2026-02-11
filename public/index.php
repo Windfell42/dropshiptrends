@@ -21,6 +21,11 @@ $products          = $provider->getTopProducts($selectedDate, $categoryParam);
 $categoryBreakdown = $provider->getCategoryBreakdown($selectedDate, $categoryParam);
 $dailyTrends       = $provider->getDailyTrends($selectedDate, 5, $categoryParam);
 
+// Prior 30-day period: top 10 products from the window ending 30 days before the selected date
+$priorDate     = $dt->modify('-30 days')->format('Y-m-d');
+$priorProducts = array_slice($provider->getTopProducts($priorDate, $categoryParam), 0, 10);
+$priorDt       = new DateTimeImmutable($priorDate);
+
 // JSON-encode data for JavaScript charts
 $productsJson    = json_encode($products);
 $categoriesJson  = json_encode($categoryBreakdown);
